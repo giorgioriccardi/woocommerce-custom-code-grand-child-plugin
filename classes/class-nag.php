@@ -113,7 +113,7 @@ class GRCF_Nag {
 		$query_string = '?' . http_build_query( array_merge( $query_params, array( GRCFunctions::OPTION_ADMIN_NOTICE_KEY => '1' ) ) );
 
 		echo '<div class="updated"><p>';
-		printf( __( "You are running <b>Camp Pacific Functions</b> - custom WordPress development" ), 'https://camppacific.com', $query_string );
+		printf( __( "You are running <b>SSWS Functions</b> - custom WordPress development" ), 'https://griccardi.com', $query_string );
 		echo "</p></div>";
 
 	}

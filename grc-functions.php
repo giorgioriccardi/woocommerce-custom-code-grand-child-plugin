@@ -3,12 +3,12 @@
  * Plugin Name: SSWS Functions
  * Plugin URI: https://griccardi.com
  * Description: SSWS Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
- * Version: 2.0.0
+ * Version: 2.0.2
  * Author: Giorgio Riccardi @SSWS
  * Author URI: https://griccardi.com
  * Requires at least: 3.0.0
- * Tested up to:      4.8.2
- * Requires PHP:		5.6
+ * Tested up to:      4.9.5
+ * Requires PHP:	  5.6 or >
 
  * @package GRC_Theme_Customization
 
@@ -228,12 +228,12 @@ class grcFunctions {
 /**
  * SSWS Functions main function
  */
-function __camp_pacific_functions_main() {
+function __grc_functions_main() {
 	new grcFunctions();
 }
 
 // Init plugin
-add_action( 'plugins_loaded', '__camp_pacific_functions_main' );
+add_action( 'plugins_loaded', '__grc_functions_main' );
 
 // Register hook
 register_activation_hook( __FILE__, array( 'grcFunctions', 'plugin_activation' ) );
