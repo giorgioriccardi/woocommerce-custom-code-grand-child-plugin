@@ -1,0 +1,365 @@
+$gutter: rem(30);
+$half-gutter: $gutter / 2;
+$grid-width: rem(1200);
+$outer-margins: rem(15);
+
+// INFORMATION: This file contains mixins and functions for using the CSS grid layout
+// properties and the flexbox fallback. Currently, this mixin only takes care of:
+// grid-template-columns (use grid()), grid-column-start and grid-column-end (use grid-column())
+// @author Gabrielle Carson gabrielle.carson@camppacific.com
+
+/// Grid mixin that generates the flexbox fallback.
+/// This produces a mobile first ruleset where the columns stack on mobile.
+/// $column: Selector for indivdual columns in the grid.
+/// $breakpoints: A map of breakpoint values, each of which is a map of grid rules.
+/// Should be in this format:
+/// $columns: (
+///   #{$medium}: (
+///     grid-template-columns: repeat(4, 1fr)
+///   ),
+///   #{$large}: (
+///     grid-template-columns: repeat(6, 1fr)
+///   )
+/// );
+@mixin grid($column, $breakpoints, $gutter: $gutter) {
+  // sass-lint:disable declarations-before-nesting property-sort-order
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  @supports not (display: grid) {
+    @include flex-fallback($column, $breakpoints);
+  }
+
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: $gutter;
+  grid-row-gap: $gutter;
+  // sass-lint:enable declarations-before-nesting property-sort-order
+
+
+  // IE will use the flex fallback since it doesn't support the new
+  // grid specification;
+  .ie & {
+    @include flex-fallback($column, $breakpoints);
+  }
+
+  // Loop through the breakpoints to setup the grid for all the breakpoints
+  @each $breakpoint, $rules in $breakpoints {
+    @include breakpoint(#{$breakpoint}) {
+
+      @each $property, $value in $rules {
+        #{$property}: $value;
+      }
+    }
+  }
+}
+
+/// Generates the flexbox fallback for grid-column-start and grid-column-end
+/// $breakpoints: A map of breakpoint values, each of which is a map of grid
+/// column rules and the number of columns. It should be in this format:
+/// $grid-column: (
+///   #{$medium}: (
+///     grid-column-start: 2,
+///     grid-column-end: 4,
+///     columns: 4
+///   ),
+///   #{$large}: (
+///     grid-column-start: 2,
+///     grid-column-end: 4,
+///     columns: 6
+///   )
+/// );
+///
+/// $parent-grid-map is the same as the $column parameter in the grid mixin. You
+/// need to make sure you use the same map as the one used in that mixin for
+/// this grid cell's parent.
+/// For now, add the number of columns manually. We should be able to grab the
+/// total number of columns from the $columns map.
+@mixin grid-column($breakpoints, $parent-grid-map) {
+  @supports not (display: grid) {
+    @include grid-column-flex($breakpoints, $parent-grid-map);
+  }
+
+  // We do a single column by default
+  @each $breakpoint, $rules in $breakpoints {
+    @each $property, $value in $rules {
+
+      @include breakpoint(#{$breakpoint}) {
+        @if $property != "columns" {
+          #{$property}: $value;
+        }
+      }
+    }
+  }
+
+  // IE will use the flex fallback since it doesn't support the new
+  // grid specification;
+  .ie & {
+    @include grid-column-flex($breakpoints, $parent-grid-map);
+  }
+}
+
+/// Flexbox fallback for grid-column-start and grid-column-end
+@mixin grid-column-flex($breakpoints, $parent-grid-map) {
+  // width = grid-column-end - grid-column-start/total columns
+  // grid-column-start can be margin-left and the value is grid-column-start/total columns
+
+  // Loop through the breakpoints to setup the margin and column width
+  @each $breakpoint, $rules in $breakpoints {
+    $grid-column-end: map-get($rules, grid-column-end);
+    $grid-column-start: map-get($rules, grid-column-start);
+    $grid-template-columns: map-get(map-get($parent-grid-map, $breakpoint), grid-template-columns);
+    // These are the number of physical columns you will see on screen
+    $columns: get-actual-columns($grid-template-columns);
+
+    $width: ($grid-column-end - $grid-column-start) / $columns * 100%;
+    $margin-left: ($grid-column-start - 1) / $columns * 100%;
+
+    @include breakpoint(#{$breakpoint}) {
+      width: $width !important;     // need to override the default grid layout
+      margin-left: $margin-left;
+    }
+  }
+}
+
+
+/// Calculates the number of columns. Grid layout considers the
+/// total number of columns to be the sum of the fr values
+@function calc-columns($list) {
+  $columns: 0;
+
+  @each $size in $list {
+    @if str-index($size, "fr") {
+      $columns: $columns + str-to-number(str-replace($size, "fr"));
+    }
+  }
+
+  @return $columns;
+}
+
+
+/// Calculates the total number of pixels that are fixed on the grid
+@function calc-total-fixed($list) {
+  $pixels: 0;
+
+  @each $size in $list {
+    @if str-index($size, "px") {
+      $pixels: $pixels + str-to-number(str-replace($size, "px"));
+    }
+  }
+
+  @return $pixels;
+}
+
+
+/// Expands the repeat rule if it exists
+/// e.g. repeat(2, 1fr) -> 1fr 1fr
+@function expand-repeat($value) {
+  $expanded: "";
+  $rule-list: ();
+  $expanded: str-replace($value, ", ", ",");
+  $expanded: str-replace($expanded, "repeat");
+  $expanded: str-replace($expanded, "(");
+  $expanded: str-replace($expanded, ")");
+
+  $expanded-list: str-to-list($expanded);
+
+  @each $rule in $expanded-list {
+    @if str-index($rule, ",") {
+      $split: str-to-list($rule, ",");
+      $total: str-to-number(nth($split, 1));
+
+      @for $i from 0 to $total {
+        $rule-list: append($rule-list, nth($split, 2));
+      }
+    } @else {
+      $rule-list: append($rule-list, $rule);
+    }
+  }
+
+  @return $rule-list;
+}
+
+
+/// Parses the grid-template-columns and sets the width
+@mixin parse-grid-template-columns($rule) {
+  // Make the rule a string so we can parse it
+  $string-val: inspect($rule);
+
+  // convert to a list so we can get the number of columns
+  $list-val: expand-repeat($string-val);
+
+  // These are the columns defined by grid-layout (how the fr is divided)
+  $grid-cols: calc-columns($list-val);
+
+  // These are the number of physical columns you will see on screen
+  $actual-cols: get-actual-columns($rule);
+
+  // Total size of all the fixed columns
+  $fixed: calc-total-fixed($list-val);
+
+  $counter: 0;
+
+  // Go through the list and calculate the percentages based on the fr values
+  @each $size in $list-val {
+    $counter: $counter + 1;
+    $width: $size;
+
+    @if str-index($size, "fr") {
+      $raw-percent: str-to-number(str-replace($size, "fr")) / $grid-cols;
+      $width: 100% * $raw-percent;
+
+      // If there are fixed values for some columns, then we should use CSS calc.
+      // We have to calculate the percentage of the remaining area
+      @if $fixed > 0 {
+        $width: calc((100% - #{$fixed}px) * #{$raw-percent});
+      }
+    } @else {
+      $width: $size;
+    }
+
+    @if $actual-cols == 1 {
+      width: #{$width};
+      padding-right: 0;
+      padding-left: 0;
+    } @else {
+      // This is the x in n - x forumula
+      $diff: $actual-cols - $counter;
+      $formula: #{$actual-cols}n;   // This is the last column in the row
+
+      // These are all the other columns
+      @if $diff > 0 {
+        $formula: #{$actual-cols}n - #{$diff};
+      }
+
+      // This is the css nth-child rule
+      &:nth-child(#{$formula}) {
+        width: #{$width};
+
+        @if $diff == 0 {
+          padding-right: 0;
+        } @else {
+          padding-right: $gutter / 2;
+        }
+
+        @if $counter == 1 {
+          padding-left: 0;
+        } @else {
+          padding-left: $gutter / 2;
+        }
+      }
+    }
+  }
+}
+
+
+/// The flex rules for the grid fallback styles
+/// This produces a mobile first ruleset where the columns stack on mobile.
+/// $column: Selector for indivdual columns in the grid.
+@mixin flex-fallback($column, $breakpoints) {
+  // $half-gutter: $gutter / 2;
+
+  @include medium-up() {
+    margin-top: (-$half-gutter);
+    margin-bottom: (-$half-gutter);
+  }
+
+  display: flex;
+  flex-flow: row wrap;
+
+  > #{$column} {
+    @include medium-up() {
+      margin-bottom: 0;
+      padding: $half-gutter;
+      flex: 0 1 auto;
+    }
+
+    margin-bottom: $gutter;
+    flex: 0 0 100%;     // stack on mobile
+
+    // Loop through the breakpoints to setup the grid for all the breakpoints
+    @each $breakpoint, $rules in $breakpoints {
+      @include breakpoint(#{$breakpoint}) {
+
+        @each $property, $value in $rules {
+          @if $property == "grid-template-columns" {
+            @include parse-grid-template-columns($value);
+
+            // TODO: auto-rows
+          }
+        } // loop through all the properties
+      }
+    } // loop through the breakpoints
+  }
+}
+
+/// Returns the number of physically visible columns based on a grid-template-columns rule
+@function get-actual-columns($grid-template-columns) {
+  // Make the rule a string so we can parse it
+  $string-val: inspect($grid-template-columns);
+
+  // convert to a list so we can get the number of columns
+  $list-val: expand-repeat($string-val);
+
+  // These are the number of physical columns you will see on screen
+  $columns: length($list-val);
+
+  @return $columns;
+}
+
+
+// Helper function from https://gist.github.com/benib/92b22ef0716d571d796a
+// sass-lint:disable quotes, indentation, space-after-comma, variable-name-format
+@function str-to-list($string, $separator: ' ', $startAt: 1) {
+    $workStr: str-slice($string,$startAt);
+    $list: ();
+    $indexOfFirstSpace: str-index($workStr,$separator);
+    @if $indexOfFirstSpace == null {
+        $list: ($workStr);
+    } @else {
+        $list: (str-slice($workStr, 1, $indexOfFirstSpace - 1));
+        $list: join($list,str-to-list($workStr, $startAt: $indexOfFirstSpace + 1));
+    }
+    @return $list;
+}
+
+// https://css-tricks.com/snippets/sass/str-replace-function/
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+// https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+@function str-to-number($string) {
+  // Matrices
+  $strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+  $numbers:  0   1   2   3   4   5   6   7   8   9;
+
+  // Result
+  $result: 0;
+
+  // Looping through all characters
+  @for $i from 1 through str-length($string) {
+    $character: str-slice($string, $i, $i);
+    $index: index($strings, $character);
+
+    @if not $index {
+      @warn "Unknown character `#{$character}`.";
+      @return false;
+    }
+
+    $number: nth($numbers, $index);
+    $result: $result * 10 + $number;
+  }
+
+  @return $result;
+}

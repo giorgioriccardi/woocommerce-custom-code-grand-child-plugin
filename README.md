@@ -29,7 +29,10 @@ You have to be an Administrator to see the "GRC Functions" option.
 
 == Changelog ==
 
-= 1.2.0: April 10, 2018 =
+= 2.0.0: April 10, 2018 =
+* Remove dev code and comments
+
+= 1.2.0: April 04, 2018 =
 * Add Gulp and Bower packages
 
 = 1.0.2: December 02, 2017 =

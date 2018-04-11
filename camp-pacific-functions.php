@@ -1,21 +1,21 @@
 <?php
 /**
- * Plugin Name: Camp Pacific Functions
- * Plugin URI: https://camppacific.com
- * Description: Camp Pacific Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
- * Version: 1.2.0
- * Author: Giorgio Riccardi @CampPacific
- * Author URI: https://camppacific.com
+ * Plugin Name: SSWS Functions
+ * Plugin URI: https://griccardi.com
+ * Description: SSWS Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
+ * Version: 2.0.0
+ * Author: Giorgio Riccardi @SSWS
+ * Author URI: https://griccardi.com
  * Requires at least: 3.0.0
  * Tested up to:      4.8.2
- * Requires PHP: 			5.6
+ * Requires PHP:		5.6
 
- * @package CP_Theme_Customization
+ * @package GRC_Theme_Customization
 
  * License: GPL v3
 
- * Camp Pacific Functions Plugin
- * Copyright © 2017-2018, Camp Pacific - www.camppacific.com
+ * SSWS Functions Plugin
+ * Copyright © 2017-2018, SSWS - www.griccardi.com
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,10 +48,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class CampPacificFunctions {
+class grcFunctions {
 
-  const OPTION_INSTALL_DATE = 'camppacificfunctions-install-date';
-	const OPTION_ADMIN_NOTICE_KEY = 'camppacificfunctions-hide-notice';
+  const OPTION_INSTALL_DATE = 'grcfunctions-install-date';
+	const OPTION_ADMIN_NOTICE_KEY = 'grcfunctions-hide-notice';
 
   /**
 	 * Method run on plugin activation
@@ -96,7 +96,7 @@ class CampPacificFunctions {
 	 * @return void
 	 */
 	public function theme_customization_css() {
-		wp_enqueue_style( 'cp-custom-css', plugins_url( '/custom-code/style.css', __FILE__ ) );
+		wp_enqueue_style( 'grc-custom-css', plugins_url( '/custom-code/style.css', __FILE__ ) );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class CampPacificFunctions {
 	 * @return void
 	 */
 	public function theme_customization_js() {
-		wp_enqueue_script( 'cp-custom-js', plugins_url( '/custom-code/scripts/main.js', __FILE__ ), array( 'jquery' ) );
+		wp_enqueue_script( 'grc-custom-js', plugins_url( '/custom-code/scripts/main.js', __FILE__ ), array( 'jquery' ) );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class CampPacificFunctions {
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'cpf-bar',
 			'parent' => 'top-secondary',
-			'title'  => __( 'Camp Pacific', 'camp-pacific-functions' ),
+			'title'  => __( 'SSWS', 'grc-functions' ),
 			'href'   => false
 		) );
 
@@ -206,9 +206,9 @@ class CampPacificFunctions {
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'cpf-bar-powered-by',
 			'parent' => 'cpf-bar',
-			'title'  => 'Powered by Camp Pacific WP Development',
+			'title'  => 'Powered by SSWS WP Development',
 			'class'	 => '',
-			'href'   => 'https://camppacific.com',
+			'href'   => 'https://griccardi.com',
 			'target' => '_blank'
 		) );
 
@@ -218,22 +218,22 @@ class CampPacificFunctions {
 	 * Print the custom CSS
 	 */
 	public function print_css() {
-		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-cpf-bar > .ab-item { padding-right: 26px !important; background: url('" . plugins_url('assets/images/camp-pacific-icon.svg', __FILE__ ) . "') center right no-repeat !important; background-size: contain !important; } #wp-admin-bar-cpf-bar.hover > .ab-item { background-color: #32373c !important; } #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-file .ab-item, #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-parts { text-align: right; } #wp-admin-bar-cpf-bar-template-parts.menupop > .ab-item: before { right: auto !important; } #wp-admin-bar-cpf-bar-powered-by { text-align: right; } #wp-admin-bar-cpf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
+		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-cpf-bar > .ab-item { padding-right: 26px !important; background: url('" . plugins_url('assets/images/grc-icon.svg', __FILE__ ) . "') center right no-repeat !important; background-size: contain !important; } #wp-admin-bar-cpf-bar.hover > .ab-item { background-color: #32373c !important; } #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-file .ab-item, #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-parts { text-align: right; } #wp-admin-bar-cpf-bar-template-parts.menupop > .ab-item: before { right: auto !important; } #wp-admin-bar-cpf-bar-powered-by { text-align: right; } #wp-admin-bar-cpf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
 	}
 
 	// end admin bar banner code
 
-} // end Class CampPacificFunctions
+} // end Class grcFunctions
 
 /**
- * Camp Pacific Functions main function
+ * SSWS Functions main function
  */
 function __camp_pacific_functions_main() {
-	new CampPacificFunctions();
+	new grcFunctions();
 }
 
 // Init plugin
 add_action( 'plugins_loaded', '__camp_pacific_functions_main' );
 
 // Register hook
-register_activation_hook( __FILE__, array( 'CampPacificFunctions', 'plugin_activation' ) );
+register_activation_hook( __FILE__, array( 'grcFunctions', 'plugin_activation' ) );
