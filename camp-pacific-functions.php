@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Camp Pacific Functions
  * Plugin URI: https://camppacific.com
- * Description: Camp Pacific Functions adds the ability to inject custom PHP, CSS, JS to the WP site, theme or child-theme without necessarily being tight to the theme container itself.
- * Version: 1.0.2
+ * Description: Camp Pacific Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
+ * Version: 1.2.0
  * Author: Giorgio Riccardi @CampPacific
  * Author URI: https://camppacific.com
  * Requires at least: 3.0.0
@@ -96,7 +96,7 @@ class CampPacificFunctions {
 	 * @return void
 	 */
 	public function theme_customization_css() {
-		wp_enqueue_style( 'custom-css', plugins_url( '/custom-code/style.css', __FILE__ ) );
+		wp_enqueue_style( 'cp-custom-css', plugins_url( '/custom-code/style.css', __FILE__ ) );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class CampPacificFunctions {
 	 * @return void
 	 */
 	public function theme_customization_js() {
-		wp_enqueue_script( 'custom-js', plugins_url( '/custom-code/custom.js', __FILE__ ), array( 'jquery' ) );
+		wp_enqueue_script( 'cp-custom-js', plugins_url( '/custom-code/scripts/main.js', __FILE__ ), array( 'jquery' ) );
 	}
 
 	/**
