@@ -29,6 +29,9 @@ You have to be an Administrator to see the "GRC Functions" option.
 
 == Changelog ==
 
+= 2.0.1: April 10, 2018 =
+* Fix functions and variables names
+
 = 2.0.0: April 10, 2018 =
 * Remove dev code and comments
 
