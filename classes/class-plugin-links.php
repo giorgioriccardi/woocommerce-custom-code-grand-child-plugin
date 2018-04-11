@@ -18,8 +18,10 @@ class CPF_Plugin_Links {
 	 */
 	public function add_links( $links ) {
 		// array_unshift( $links, '<a href="https://camppacific.com" target="_blank" style="color:#c6ff00;font-weight:bold;">' . __( 'Camp Pacific Website', 'camp-pacific-functions' ) . '</a>' );
-		array_unshift( $links, '<img class="" alt="" id="" height="24" width="24" style="position: relative; top: 7px; "
-		src="' . esc_url( plugins_url( 'assets/images/camp-pacific-icon.svg', dirname(__FILE__) ) ) . '">');
+
+		// array_unshift( $links, '<img class="" alt="" id="" height="24" width="24" style="position: relative; top: 7px; " src="' . esc_url( plugins_url( 'assets/images/camp-pacific-icon.svg', dirname(__FILE__) ) ) . '">');
+
+		array_unshift( $links, '<img alt="Camp Pacific Logo" style="position: relative; top: 7px; height: 24px; width: 24px; " src="' . esc_url( plugins_url( 'assets/images/camp-pacific-icon.svg', dirname(__FILE__) ) ) . '">');
 		return $links;
 	}
 

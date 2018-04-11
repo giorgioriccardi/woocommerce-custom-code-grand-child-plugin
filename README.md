@@ -18,7 +18,7 @@ A plugin to customize functions, styles and js for woocommerce-storefront child 
 
 == Installation ==
 
-1. Upload `camp-pacific-functions` to the `/wp-content/plugins/` directory
+1. Upload `grc-functions` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently asked questions ==
@@ -28,6 +28,9 @@ A plugin to customize functions, styles and js for woocommerce-storefront child 
 You have to be an Administrator to see the "GRC Functions" option.
 
 == Changelog ==
+
+= 1.0.1: October 25, 2017 =
+* Integrated functions and folders to enqueue JS, CSS, PHP.
 
 = 1.0.0: October 24, 2017 =
 * Initial release.

@@ -3,7 +3,7 @@
  * Plugin Name: Camp Pacific Functions
  * Plugin URI: https://camppacific.com
  * Description: Camp Pacific Functions adds the ability to inject custom PHP, CSS, JS to the WP site, theme or child-theme without necessarily being tight to the theme container itself.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Giorgio Riccardi @CampPacific
  * Author URI: https://camppacific.com
  * Requires at least: 3.0.0
@@ -182,7 +182,7 @@ class CampPacificFunctions {
 			return;
 		}
 
-		// CPF actions and filers
+		// CPF actions and filters
 		add_action( 'wp_head', array( $this, 'print_css' ) );
 		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 1000 );
 
@@ -218,15 +218,7 @@ class CampPacificFunctions {
 	 * Print the custom CSS
 	 */
 	public function print_css() {
-		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-cpf-bar >
-      .ab-item { padding-right: 26px !important;
-      background: url('" . plugins_url( 'assets/images/camp-pacific-icon.svg', __FILE__ ) . "') center right no-repeat !important;
-      background-size: contain !important; }
-      #wp-admin-bar-cpf-bar.hover >
-      .ab-item { background-color: #32373c !important; } #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-file .ab-item, #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-parts { text-align: right; } #wp-admin-bar-cpf-bar-template-parts.menupop >
-      .ab-item: before { right: auto !important; }
-      #wp-admin-bar-cpf-bar-powered-by
-      { text-align: right; } #wp-admin-bar-cpf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
+		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-cpf-bar > .ab-item { padding-right: 26px !important; background: url('" . plugins_url('assets/images/camp-pacific-icon.svg', __FILE__ ) . "') center right no-repeat !important; background-size: contain !important; } #wp-admin-bar-cpf-bar.hover > .ab-item { background-color: #32373c !important; } #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-file .ab-item, #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-parts { text-align: right; } #wp-admin-bar-cpf-bar-template-parts.menupop > .ab-item: before { right: auto !important; } #wp-admin-bar-cpf-bar-powered-by { text-align: right; } #wp-admin-bar-cpf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
 	}
 
 	// end admin bar banner code

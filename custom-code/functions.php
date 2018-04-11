@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  /********************************************************/
  // Install Google Analytics in WordPress
  /********************************************************/
- add_action('wp_footer', 'add_googleanalytics');
+ // add_action('wp_footer', 'add_googleanalytics');
  function add_googleanalytics() { ?>
  	<script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -41,9 +41,8 @@ if ( ! defined( 'ABSPATH' ) ) {
    $mimes['svg'] = 'image/svg+xml';
    return $mimes;
  }
- add_filter('upload_mimes', 'cc_mime_types');
+ // add_filter('upload_mimes', 'cc_mime_types');
 
  /********************************************************/
- // TEST PHP injection
+ // ----------
  /********************************************************/
-echo "GIORGIO TEST PHP injection";
