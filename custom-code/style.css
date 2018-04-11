@@ -1,0 +1,9 @@
+/**
+ * Add any custom CSS here.
+ *
+ * This file will be loaded after all other theme stylesheets.
+ */
+
+.debug {
+  border: #FF0000 solid thick;
+}
