@@ -29,6 +29,9 @@ You have to be an Administrator to see the "GRC Functions" option.
 
 == Changelog ==
 
+= 1.0.2: December 02, 2017 =
+* Created Gitlab repo [woocommerce-custom-code-grand-child-plugin](https://github.com/giorgioriccardi/woocommerce-custom-code-grand-child-plugin).
+
 = 1.0.1: October 25, 2017 =
 * Integrated functions and folders to enqueue JS, CSS, PHP.
 
