@@ -11,7 +11,8 @@ import distutils
 from distutils import dir_util
 from shutil import copy2
 
-FRONTEND_REPO = 'git@gitlab.com:front-end-projects/templates-linters.git'
+# FRONTEND_REPO = 'git@gitlab.com:front-end-projects/templates-linters.git'
+FRONTEND_REPO = 'giorgioriccardi@bitbucket.org/giorgioriccardi/templates-linters.git'
 
 # Get the PROJECT_ROOT as the top level git repo.
 PROJECT_ROOT = subprocess.Popen(['git', 'rev-parse', '--show-toplevel'], stdout=subprocess.PIPE).communicate()[0].rstrip()
