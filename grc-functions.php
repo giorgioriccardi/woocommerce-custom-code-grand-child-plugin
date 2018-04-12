@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: SSWS Functions
+ * Plugin Name: GRC Functions
  * Plugin URI: https://griccardi.com
- * Description: SSWS Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
+ * Description: GRC Functions adds the ability to inject custom PHP, CSS, JS to the WP site, active theme or child-theme.
  * Version: 2.0.2
- * Author: Giorgio Riccardi @SSWS
+ * Author: Giorgio Riccardi @GRC
  * Author URI: https://griccardi.com
  * Requires at least: 3.0.0
  * Tested up to:      4.9.5
@@ -14,8 +14,8 @@
 
  * License: GPL v3
 
- * SSWS Functions Plugin
- * Copyright © 2017-2018, SSWS - www.griccardi.com
+ * GRC Functions Plugin
+ * Copyright © 2017-2018, GRC - www.griccardi.com
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ class grcFunctions {
 		require_once( plugin_dir_path( __FILE__ ) . '/classes/class-nag.php' );
 
 		// insert install date
-		CPF_Nag::insert_install_date();
+		GRCF_Nag::insert_install_date();
 	}
 
 	/**
@@ -167,7 +167,7 @@ class grcFunctions {
 		require_once( plugin_dir_path( __FILE__ ) . '/classes/class-plugin-links.php' );
 
 		// setup plugin links
-		$plugin_links = new CPF_Plugin_Links();
+		$plugin_links = new GRCF_Plugin_Links();
 		$plugin_links->setup();
 	}
 
@@ -182,7 +182,7 @@ class grcFunctions {
 			return;
 		}
 
-		// CPF actions and filters
+		// GRCF actions and filters
 		add_action( 'wp_head', array( $this, 'print_css' ) );
 		add_action( 'admin_bar_menu', array( $this, 'admin_bar_menu' ), 1000 );
 
@@ -196,17 +196,17 @@ class grcFunctions {
 
 		// Add top menu
 		$wp_admin_bar->add_menu( array(
-			'id'     => 'cpf-bar',
+			'id'     => 'grcf-bar',
 			'parent' => 'top-secondary',
-			'title'  => __( 'SSWS', 'grc-functions' ),
+			'title'  => __( 'GRC', 'grc-functions' ),
 			'href'   => false
 		) );
 
 		// Add powered by
 		$wp_admin_bar->add_menu( array(
-			'id'     => 'cpf-bar-powered-by',
-			'parent' => 'cpf-bar',
-			'title'  => 'Powered by SSWS WP Development',
+			'id'     => 'grcf-bar-powered-by',
+			'parent' => 'grcf-bar',
+			'title'  => 'Powered by GRC WP Development',
 			'class'	 => '',
 			'href'   => 'https://griccardi.com',
 			'target' => '_blank'
@@ -218,7 +218,7 @@ class grcFunctions {
 	 * Print the custom CSS
 	 */
 	public function print_css() {
-		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-cpf-bar > .ab-item { padding-right: 26px !important; background: url('" . plugins_url('assets/images/grc-icon.svg', __FILE__ ) . "') center right no-repeat !important; background-size: contain !important; } #wp-admin-bar-cpf-bar.hover > .ab-item { background-color: #32373c !important; } #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-file .ab-item, #wp-admin-bar-cpf-bar #wp-admin-bar-cpf-bar-template-parts { text-align: right; } #wp-admin-bar-cpf-bar-template-parts.menupop > .ab-item: before { right: auto !important; } #wp-admin-bar-cpf-bar-powered-by { text-align: right; } #wp-admin-bar-cpf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
+		echo "<style type=\"text/css\" media=\"screen\"> #wp-admin-bar-grcf-bar > .ab-item { padding-right: 26px !important; background: url('" . plugins_url('assets/images/grc-icon.svg', __FILE__ ) . "') center right no-repeat !important; background-size: contain !important; } #wp-admin-bar-grcf-bar.hover > .ab-item { background-color: #32373c !important; } #wp-admin-bar-grcf-bar #wp-admin-bar-grcf-bar-template-file .ab-item, #wp-admin-bar-grcf-bar #wp-admin-bar-grcf-bar-template-parts { text-align: right; } #wp-admin-bar-grcf-bar-template-parts.menupop > .ab-item: before { right: auto !important; } #wp-admin-bar-grcf-bar-powered-by { text-align: right; } #wp-admin-bar-grcf-bar-powered-by a { color:#c6ff00 !important; } </style>\n";
 	}
 
 	// end admin bar banner code
@@ -226,7 +226,7 @@ class grcFunctions {
 } // end Class grcFunctions
 
 /**
- * SSWS Functions main function
+ * GRC Functions main function
  */
 function __grc_functions_main() {
 	new grcFunctions();
